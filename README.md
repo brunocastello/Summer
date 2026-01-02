@@ -47,6 +47,12 @@ The helper authorizes the SMC binary to run with elevated privileges, allowing h
 - App code: MIT
 - SMC binary: GPL v2 (from smcFanControl project)
 
-## Author
+## Credits & License
 
-Bruno Castelló - 2026
+This project interfaces with Apple's System Management Controller using a binary tool based on the original `smc` utility.
+
+* **SMC Tool**: Original implementation by **devnull** (2006).
+* **Contributions**: Portions Copyright (C) 2013 **Michael Wilber**.
+* **License**: This component is licensed under the **GNU General Public License (GPL) version 2** or later. 
+
+Special thanks to the open-source community and the authors of [smcFanControl](https://github.com/hholtmann/smcFanControl) for maintaining and distributing these tools over the years.
