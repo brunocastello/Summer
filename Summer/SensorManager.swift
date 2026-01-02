@@ -39,7 +39,7 @@ class SensorManager: ObservableObject {
     ]
 
     init() {
-        timer = Timer.publish(every: 2.0, on: .main, in: .common)
+        timer = Timer.publish(every: 3.0, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 Task { @MainActor in
