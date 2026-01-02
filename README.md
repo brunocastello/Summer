@@ -1,6 +1,6 @@
 # Summer
 
-Hardware temperature and fan speed monitor for Apple Silicon Macs.
+Hardware temperature and fan speed monitor for Apple Silicon Macs. Summer is still under development.
 
 ## Features
 
