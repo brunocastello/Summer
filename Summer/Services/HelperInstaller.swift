@@ -74,10 +74,7 @@ class HelperInstaller {
                 let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()
                 let errorMessage = String(data: errorData, encoding: .utf8) ?? "Unknown error"
                 throw NSError(domain: "HelperInstaller", code: 2, userInfo: [NSLocalizedDescriptionKey: errorMessage])
-            }
-            
-            print("✅ Helper instalado com sucesso via Process")
-        } catch {
+            }        } catch {
             throw error
         }; do {
             try? FileManager.default.removeItem(atPath: scriptPath)

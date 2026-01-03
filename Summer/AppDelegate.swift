@@ -41,15 +41,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if response == .alertFirstButtonReturn {
             Task.detached(priority: .userInitiated) {
                 do {
-                    try HelperInstaller.install()
-                    print("✅ Helper installed successfully")
-                    
+                    try HelperInstaller.install()                    
                     await MainActor.run {
                         AppDelegate.sensorViewModel.updateSensors()
                     }
-                } catch {
-                    print("❌ Error during installation: \(error)")
-                }
+                } catch {                }
             }
         }
     }
