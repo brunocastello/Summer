@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import AppKit
 
 @MainActor
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -22,33 +21,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppDelegate.menuBarViewModel.updateIcon(temp: nil)
         
         startMonitoring()
-        
-        if HelperInstaller.shouldRedeploy() {
-            showInstallAlert()
-        }
-    }
-    
-    private func showInstallAlert() {
-        let alert = NSAlert()
-        alert.messageText = "Install Privileged Helper"
-        alert.informativeText = "Summer needs to install a helper to authorize the SMC binary to read hardware sensors."
-        alert.addButton(withTitle: "Install")
-        alert.addButton(withTitle: "Cancel")
-        
-        NSApp.activate(ignoringOtherApps: true)
-        
-        let response = alert.runModal()
-        
-        if response == .alertFirstButtonReturn {
-            Task.detached(priority: .userInitiated) {
-                do {
-                    try HelperInstaller.install()                    
-                    await MainActor.run {
-                        AppDelegate.sensorViewModel.updateSensors()
-                    }
-                } catch {                }
-            }
-        }
     }
     
     private func startMonitoring() {

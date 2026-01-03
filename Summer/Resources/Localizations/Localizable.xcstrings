@@ -109,13 +109,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preferencias..."
+            "value" : "Preferencias…"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preferências..."
+            "value" : "Preferências…"
           }
         }
       }

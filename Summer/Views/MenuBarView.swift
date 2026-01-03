@@ -52,9 +52,9 @@ struct MenuBarView: View {
                 }
                 .padding(.horizontal, 7)
                 .padding(.top, sensorViewModel.fans.isEmpty ? 0 : 3)
-                
-                Divider().padding(.horizontal, 3)
             }
+
+            Divider().padding(.horizontal, 3)
             
             VStack(spacing: 0) {
                 Button("menubar.about") {
