@@ -1,5 +1,5 @@
 //
-//  AppSettings.swift
+//  AppPreferences.swift
 //  Summer
 //
 //  Created by Bruno Castelló on 03/01/26.
@@ -17,8 +17,8 @@ enum TemperatureUnit: String, CaseIterable, Identifiable {
     /// Localized display name for the temperature unit
     var localizedName: LocalizedStringKey {
         switch self {
-        case .celsius: return "settings.temperature.celsius"
-        case .fahrenheit: return "settings.temperature.fahrenheit"
+        case .celsius: return "preferences.temperature.celsius"
+        case .fahrenheit: return "preferences.temperature.fahrenheit"
         }
     }
     
@@ -42,16 +42,16 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     /// Localized display name for the language
     var localizedName: LocalizedStringKey {
         switch self {
-        case .english: return "settings.language.english"
-        case .portuguese: return "settings.language.portuguese"
-        case .spanish: return "settings.language.spanish"
+        case .english: return "preferences.language.english"
+        case .portuguese: return "preferences.language.portuguese"
+        case .spanish: return "preferences.language.spanish"
         }
     }
 }
 
 /// Application settings stored in UserDefaults
 @MainActor
-class AppSettings: ObservableObject {
+class AppPreferences: ObservableObject {
     /// Selected temperature unit (Celsius or Fahrenheit)
     @Published var temperatureUnit: TemperatureUnit {
         didSet {
@@ -67,7 +67,7 @@ class AppSettings: ObservableObject {
     }
     
     /// Singleton instance
-    static let shared = AppSettings()
+    static let shared = AppPreferences()
     
     private init() {
         // Load saved temperature unit or default to Celsius

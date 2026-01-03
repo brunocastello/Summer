@@ -142,7 +142,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "\"${SRCROOT}/Summer/build-smc.sh\"\n\n# Copy to app bundle Resources\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Resources\"\ncp \"${SRCROOT}/Summer/smc\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Resources/smc\"\nchmod +x \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Resources/smc\"\n";
+			shellScript = "\"${SRCROOT}/Summer/Resources/Scripts/build-smc.sh\"\n\n# Copy to app bundle Resources\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Resources\"\ncp \"${SRCROOT}/Summer/smc\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Resources/smc\"\nchmod +x \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Resources/smc\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SensorRow: View {
-    let label: String
+    let label: LocalizedStringKey
     let temp: Int
     
     var body: some View {

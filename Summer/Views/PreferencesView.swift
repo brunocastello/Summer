@@ -1,5 +1,5 @@
 //
-//  SettingsView.swift
+//  PreferencesView.swift
 //  Summer
 //
 //  Created by Bruno Castelló on 03/01/26.
@@ -8,8 +8,8 @@
 import SwiftUI
 
 /// Allows users to configure temperature unit and application language
-struct SettingsView: View {
-    @EnvironmentObject var settings: AppSettings
+struct PreferencesView: View {
+    @EnvironmentObject var preferences: AppPreferences
     
     var body: some View {
         VStack(spacing: 20) {
@@ -18,12 +18,12 @@ struct SettingsView: View {
                 
                 // Temperature Row
                 HStack {
-                    Text("settings.temperature.title")
+                    Text("preferences.temperature.title")
                         .font(.system(size: 13))
                     
                     Spacer()
                     
-                    Picker("", selection: $settings.temperatureUnit) {
+                    Picker("", selection: $preferences.temperatureUnit) {
                         ForEach(TemperatureUnit.allCases) { unit in
                             Text(unit.localizedName).tag(unit)
                         }
@@ -36,12 +36,12 @@ struct SettingsView: View {
                 
                 // Language Row
                 HStack {
-                    Text("settings.language.title")
+                    Text("preferences.language.title")
                         .font(.system(size: 13))
                     
                     Spacer()
                     
-                    Picker("", selection: $settings.language) {
+                    Picker("", selection: $preferences.language) {
                         ForEach(AppLanguage.allCases) { lang in
                             Text(lang.localizedName).tag(lang)
                         }
@@ -50,7 +50,7 @@ struct SettingsView: View {
                     .pickerStyle(.menu)
                 }
                 
-                Text("settings.note")
+                Text("preferences.note")
                     .font(.system(size: 10))
                     .foregroundColor(.secondary)
                     .padding(.top, -4)
@@ -58,7 +58,7 @@ struct SettingsView: View {
         }
         .padding(20)
         .frame(width: 420)
-        .navigationTitle("Preferences")
+        .navigationTitle("preferences.title")
     }
 }
 
@@ -66,7 +66,7 @@ struct SettingsView: View {
 
 #Preview {
     NavigationStack {
-        SettingsView()
-            .environmentObject(AppSettings.shared)
+        PreferencesView()
+            .environmentObject(AppPreferences.shared)
     }
 }

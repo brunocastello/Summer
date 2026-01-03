@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct FanRow: View {
-    let label: String
+    let label: LocalizedStringKey
     let rpm: Int
     let maxRPM: Int
     
@@ -21,7 +21,7 @@ struct FanRow: View {
             Spacer()
             
             HStack(spacing: 8) {
-                Text(rpm > 0 ? "\(rpm) RPM" : "Inactive")
+                Text(rpm > 0 ? "\(rpm) RPM" : "fan.inactive")
                     .font(.system(size: 12))
                     .foregroundColor(.primary)
                     .frame(width: 75, alignment: .trailing)
