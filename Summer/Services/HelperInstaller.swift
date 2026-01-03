@@ -21,49 +21,44 @@ class HelperInstaller {
             ])
         }
         
-        let launchDaemonsDir = NSHomeDirectory() + "/Library/LaunchDaemons"
-        let plistPath = launchDaemonsDir + "/com.brunocastello.Summer.plist"
+        guard let plistPath = Bundle.main.path(forResource: "com.brunocastello.Summer", ofType: "plist", inDirectory: "Resources/LaunchDaemons") else {
+            throw NSError(domain: "HelperInstaller", code: 2, userInfo: [
+                NSLocalizedDescriptionKey: "LaunchDaemon plist not found in bundle"
+            ])
+        }
         
-        let plistContent = """
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
-            <key>Label</key>
-            <string>com.brunocastello.Summer</string>
-            <key>ProgramArguments</key>
-            <array>
-                <string>\(smcPath)</string>
-            </array>
-            <key>RunAtLoad</key>
-            <false/>
-            <key>KeepAlive</key>
-            <false/>
-        </dict>
-        </plist>
-        """
+        guard var plistContent = try? String(contentsOfFile: plistPath, encoding: .utf8) else {
+            throw NSError(domain: "HelperInstaller", code: 3, userInfo: [
+                NSLocalizedDescriptionKey: "Could not read plist file"
+            ])
+        }
+        
+        plistContent = plistContent.replacingOccurrences(
+            of: "chmod +x ~/Library/Application\\ Support/Summer/smc",
+            with: "chmod +x \(smcPath)"
+        )
+        
+        let launchDaemonsDir = NSHomeDirectory() + "/Library/LaunchDaemons"
+        let destPlistPath = launchDaemonsDir + "/com.brunocastello.Summer.plist"
         
         let script = """
         #!/bin/bash
         set -e
         mkdir -p "\(launchDaemonsDir)"
-        cat > "\(plistPath)" << 'PLIST_END'
+        cat > "\(destPlistPath)" << 'PLIST_END'
         \(plistContent)
         PLIST_END
-        chmod 644 "\(plistPath)"
+        chmod 644 "\(destPlistPath)"
         """
         
         let tempDir = NSTemporaryDirectory()
         let scriptPath = (tempDir as NSString).appendingPathComponent("install-summer-helper.sh")
         
-        // 1. Escreve o script temporário
         try script.write(toFile: scriptPath, atomically: true, encoding: .utf8)
         try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: scriptPath)
         
-        // 2. Preparar o comando AppleScript para pedir privilégios
         let appleScriptCommand = "do shell script \"'\(scriptPath)'\" with administrator privileges"
         
-        // 3. EXCUÇÃO VIA PROCESS (Para matar o Purple Warning)
         let task = Process()
         task.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
         task.arguments = ["-e", appleScriptCommand]
@@ -85,7 +80,6 @@ class HelperInstaller {
         } catch {
             throw error
         }; do {
-            // Limpa o script temporário sempre
             try? FileManager.default.removeItem(atPath: scriptPath)
         }
     }
@@ -93,16 +87,13 @@ class HelperInstaller {
     static func shouldRedeploy() -> Bool {
         let plistPath = NSHomeDirectory() + "/Library/LaunchDaemons/com.brunocastello.Summer.plist"
         
-        // Se não existe, com certeza precisa instalar
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: plistPath)),
               let plist = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: Any],
               let arguments = plist["ProgramArguments"] as? [String],
               let installedSmcPath = arguments.first else {
             return true
         }
-        
-        // O ponto crítico: O caminho do binário no disco mudou?
-        // (Ex: Usuário moveu o app de Downloads para Applications)
+
         guard let currentSmcPath = Bundle.main.path(forResource: "smc", ofType: nil) else { return false }
         
         return installedSmcPath != currentSmcPath

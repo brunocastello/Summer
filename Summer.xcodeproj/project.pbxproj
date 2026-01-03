@@ -14,8 +14,8 @@
 		APP_EXCEPTIONS /* Exceptions for "Summer" folder in "Summer" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"build-smc.sh",
 				Info.plist,
+				"Resources/Scripts/build-smc.sh",
 			);
 			target = APP_TARGET /* Summer */;
 		};
