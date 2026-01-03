@@ -97,6 +97,29 @@
         }
       }
     },
+    "menubar.preferences" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preferences…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preferencias..."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preferências..."
+          }
+        }
+      }
+    },
     "menubar.quit" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -139,29 +162,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "SENSORES"
-          }
-        }
-      }
-    },
-    "menubar.settings" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ajustes"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ajustes"
           }
         }
       }

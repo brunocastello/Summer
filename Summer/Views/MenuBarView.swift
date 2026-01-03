@@ -29,6 +29,7 @@ struct MenuBarView: View {
                     }
                 }
                 .padding(.horizontal, 7)
+                .padding(.top, 5)
             }
 
             // SENSORS
@@ -51,9 +52,9 @@ struct MenuBarView: View {
                 }
                 .padding(.horizontal, 7)
                 .padding(.top, sensorViewModel.fans.isEmpty ? 0 : 3)
+                
+                Divider().padding(.horizontal, 3)
             }
-
-            Divider().padding(.horizontal, 3)
             
             VStack(spacing: 0) {
                 Button("menubar.about") {
@@ -61,7 +62,7 @@ struct MenuBarView: View {
                 }
                 .buttonStyle(.menuBar)
                 
-                Button("menubar.settings") {
+                Button("menubar.preferences") {
                     AppDelegate.openPreferencesWindow()
                 }
                 .buttonStyle(.menuBar)
