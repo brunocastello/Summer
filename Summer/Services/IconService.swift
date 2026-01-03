@@ -7,17 +7,23 @@
 
 import AppKit
 
+/// Service responsible for generating menubar status icons
 class IconService {
     
-    func generateIcon(temp: Int?) -> NSImage {
-        let tempString = temp != nil ? "\(temp!)°" : "--°"
+    /// Generates menubar icon with thermometer symbol and temperature
+    /// - Parameters:
+    ///   - temp: Temperature already converted to display unit
+    ///   - symbol: Temperature symbol (°C or °F)
+    /// - Returns: NSImage for menubar display
+    func generateIcon(temp: Int?, symbol: String) -> NSImage {
+        let tempString = temp != nil ? "\(temp!)\(symbol)" : "--\(symbol)"
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: NSFont.systemFont(ofSize: 13),
             .foregroundColor: NSColor.labelColor
         ]
         
-        let totalWidth: CGFloat = 42
+        let totalWidth: CGFloat = 50  // Increased to accommodate Fahrenheit
         let iconWidth: CGFloat = 16
         let spacing: CGFloat = 0
         

@@ -18,12 +18,9 @@ struct SummerApp: App {
         // Menu bar extra interface
         MenuBarExtra(
             content: {
-                VStack(alignment: .leading, spacing: 5) {
-                    MenuBarView()
-                        .environmentObject(AppDelegate.sensorViewModel)
-                }
-                .padding(5)
-                .frame(width: 260)
+                MenuBarView()
+                    .environmentObject(AppDelegate.sensorViewModel)
+                    .environmentObject(AppDelegate.preferences)
             },
             label: {
                 if let image = menuBarViewModel.statusImage {

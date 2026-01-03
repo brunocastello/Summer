@@ -7,62 +7,31 @@
 
 import SwiftUI
 
-/// Temperature unit options for display
-enum TemperatureUnit: String, CaseIterable, Identifiable {
+/// Temperature display mode options
+enum TemperatureMode: String, CaseIterable, Identifiable {
     case celsius = "celsius"
     case fahrenheit = "fahrenheit"
+    case system = "system"
     
     var id: String { rawValue }
     
-    /// Localized display name for the temperature unit
+    /// Localized display name for the temperature mode
     var localizedName: LocalizedStringKey {
         switch self {
         case .celsius: return "preferences.temperature.celsius"
         case .fahrenheit: return "preferences.temperature.fahrenheit"
-        }
-    }
-    
-    /// Symbol to display after temperature values
-    var symbol: String {
-        switch self {
-        case .celsius: return "°C"
-        case .fahrenheit: return "°F"
+        case .system: return "preferences.temperature.system"
         }
     }
 }
 
-/// Supported language options
-enum AppLanguage: String, CaseIterable, Identifiable {
-    case english = "en"
-    case portuguese = "pt-BR"
-    case spanish = "es"
-    
-    var id: String { rawValue }
-    
-    /// Localized display name for the language
-    var localizedName: LocalizedStringKey {
-        switch self {
-        case .english: return "preferences.language.english"
-        case .portuguese: return "preferences.language.portuguese"
-        case .spanish: return "preferences.language.spanish"
-        }
-    }
-}
-
-/// Application settings stored in UserDefaults
+/// Application preferences stored in UserDefaults
 @MainActor
 class AppPreferences: ObservableObject {
-    /// Selected temperature unit (Celsius or Fahrenheit)
-    @Published var temperatureUnit: TemperatureUnit {
+    /// Selected temperature display mode
+    @Published var temperatureMode: TemperatureMode {
         didSet {
-            UserDefaults.standard.set(temperatureUnit.rawValue, forKey: "temperatureUnit")
-        }
-    }
-    
-    /// Selected application language
-    @Published var language: AppLanguage {
-        didSet {
-            UserDefaults.standard.set(language.rawValue, forKey: "language")
+            UserDefaults.standard.set(temperatureMode.rawValue, forKey: "temperatureMode")
         }
     }
     
@@ -70,28 +39,46 @@ class AppPreferences: ObservableObject {
     static let shared = AppPreferences()
     
     private init() {
-        // Load saved temperature unit or default to Celsius
-        if let savedUnit = UserDefaults.standard.string(forKey: "temperatureUnit"),
-           let unit = TemperatureUnit(rawValue: savedUnit) {
-            self.temperatureUnit = unit
+        // Load saved temperature mode or default to system
+        if let savedMode = UserDefaults.standard.string(forKey: "temperatureMode"),
+           let mode = TemperatureMode(rawValue: savedMode) {
+            self.temperatureMode = mode
         } else {
-            self.temperatureUnit = .celsius
-        }
-        
-        // Load saved language or default to English
-        if let savedLang = UserDefaults.standard.string(forKey: "language"),
-           let lang = AppLanguage(rawValue: savedLang) {
-            self.language = lang
-        } else {
-            self.language = .english
+            self.temperatureMode = .system
         }
     }
     
-    /// Converts Celsius temperature to the selected unit
+    /// Determines effective temperature unit based on mode
+    private var effectiveUnit: TemperatureUnit {
+        switch temperatureMode {
+        case .celsius:
+            return .celsius
+        case .fahrenheit:
+            return .fahrenheit
+        case .system:
+            // Use system locale to determine temperature unit
+            return systemPreferredUnit
+        }
+    }
+    
+    /// Detects system's preferred temperature unit from locale
+    private var systemPreferredUnit: TemperatureUnit {
+        let locale = Locale.current
+        
+        // Check if locale uses Fahrenheit (primarily US territories)
+        if locale.measurementSystem == .us {
+            return .fahrenheit
+        }
+        
+        // Default to Celsius for rest of world
+        return .celsius
+    }
+    
+    /// Converts Celsius temperature to the effective unit
     /// - Parameter celsius: Temperature in Celsius
-    /// - Returns: Temperature in selected unit
+    /// - Returns: Temperature in effective unit
     func convertTemperature(_ celsius: Int) -> Int {
-        switch temperatureUnit {
+        switch effectiveUnit {
         case .celsius:
             return celsius
         case .fahrenheit:
@@ -99,8 +86,21 @@ class AppPreferences: ObservableObject {
         }
     }
     
-    /// Returns the appropriate temperature symbol based on selected unit
+    /// Returns the appropriate temperature symbol based on effective unit
     var temperatureSymbol: String {
-        temperatureUnit.symbol
+        switch effectiveUnit {
+        case .celsius:
+            return "°C"
+        case .fahrenheit:
+            return "°F"
+        }
     }
+}
+
+// MARK: - Internal Types
+
+/// Internal temperature unit (Celsius or Fahrenheit)
+private enum TemperatureUnit {
+    case celsius
+    case fahrenheit
 }

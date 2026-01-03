@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// Allows users to configure temperature unit and application language
+/// Allows users to configure temperature display mode
 struct PreferencesView: View {
     @EnvironmentObject var preferences: AppPreferences
     
@@ -15,39 +15,20 @@ struct PreferencesView: View {
         VStack(spacing: 20) {
             // Content Container
             VStack(alignment: .leading, spacing: 12) {
-                
-                // Temperature Row
+                // Temperature Row with Radio Buttons
                 HStack {
                     Text("preferences.temperature.title")
                         .font(.system(size: 13))
                     
                     Spacer()
                     
-                    Picker("", selection: $preferences.temperatureUnit) {
-                        ForEach(TemperatureUnit.allCases) { unit in
-                            Text(unit.localizedName).tag(unit)
+                    Picker("", selection: $preferences.temperatureMode) {
+                        ForEach(TemperatureMode.allCases) { mode in
+                            Text(mode.localizedName).tag(mode)
                         }
                     }
                     .pickerStyle(.radioGroup)
                     .horizontalRadioGroupLayout()
-                }
-                
-                Divider()
-                
-                // Language Row
-                HStack {
-                    Text("preferences.language.title")
-                        .font(.system(size: 13))
-                    
-                    Spacer()
-                    
-                    Picker("", selection: $preferences.language) {
-                        ForEach(AppLanguage.allCases) { lang in
-                            Text(lang.localizedName).tag(lang)
-                        }
-                    }
-                    .frame(width: 150)
-                    .pickerStyle(.menu)
                 }
                 
                 Text("preferences.note")

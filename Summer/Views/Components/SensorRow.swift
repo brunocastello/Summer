@@ -7,9 +7,22 @@
 
 import SwiftUI
 
+/// Displays a single sensor's temperature information with label, value, and visual progress bar
 struct SensorRow: View {
     let label: LocalizedStringKey
     let temp: Int
+    
+    @EnvironmentObject var preferences: AppPreferences
+    
+    /// Converts and formats the temperature based on user's preferred unit
+    private var displayTemp: Int {
+        preferences.convertTemperature(temp)
+    }
+    
+    /// Temperature symbol based on current preference
+    private var symbol: String {
+        preferences.temperatureSymbol
+    }
     
     var body: some View {
         HStack(spacing: 0) {
@@ -20,7 +33,7 @@ struct SensorRow: View {
             Spacer()
             
             HStack(spacing: 8) {
-                Text(temp > 0 ? "\(temp)°C" : "--°C")
+                Text(displayTemp > 0 ? "\(displayTemp)\(symbol)" : "--\(symbol)")
                     .font(.system(size: 12))
                     .foregroundColor(.primary)
                     .frame(width: 45, alignment: .trailing)

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MenuBarView: View {
     @EnvironmentObject var sensorViewModel: SensorViewModel
-    @StateObject var preferences = AppPreferences.shared
+    @EnvironmentObject var preferences: AppPreferences
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -62,7 +62,7 @@ struct MenuBarView: View {
                 .buttonStyle(.menuBar)
                 
                 Button("menubar.settings") {
-                    openSettingsWindow()
+                    AppDelegate.openPreferencesWindow()
                 }
                 .buttonStyle(.menuBar)
             }
@@ -88,33 +88,6 @@ struct MenuBarView: View {
         }
         .foregroundColor(.secondary)
         .padding(.bottom, 4)
-    }
-    
-    /// Opens the Settings window, creating it if it doesn't exist
-    private func openSettingsWindow() {
-        // Check if settings window already exists
-        if let existingWindow = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "settings-window" }) {
-            existingWindow.makeKeyAndOrderFront(nil)
-            NSApp.activate(ignoringOtherApps: true)
-            return
-        }
-        
-        // Create new settings window
-        let preferencesView = PreferencesView()
-            .environmentObject(preferences)
-        
-        let hostingController = NSHostingController(rootView: preferencesView)
-        
-        let window = NSWindow(contentViewController: hostingController)
-        window.identifier = NSUserInterfaceItemIdentifier("settings-window")
-        window.title = NSLocalizedString("preferences.title", comment: "")
-        window.styleMask = [.titled, .closable]
-        window.isReleasedWhenClosed = false
-        window.center()
-        window.setFrameAutosaveName("Settings")
-        
-        window.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
     }
 }
 
