@@ -117,3 +117,26 @@ struct MenuBarView: View {
         NSApp.activate(ignoringOtherApps: true)
     }
 }
+
+// MARK: - Preview
+
+#Preview {
+    let mockViewModel = SensorViewModel()
+    
+    mockViewModel.fans = [2150, 1980]
+    mockViewModel.readings = [
+        "Wi-Fi": 38,
+        "Battery": 32,
+        "PSU": 45,
+        "Storage": 35,
+        "Enclosure": 30,
+        "CPU": 52,
+        "Logic Board": 41,
+        "Palm Rest": 28
+    ]
+    
+    return MenuBarView()
+        .environmentObject(mockViewModel)
+        .environmentObject(AppSettings.shared)
+        .frame(width: 260)
+}

@@ -75,7 +75,7 @@ struct SettingsView: View {
             HStack {
                 Spacer()
                 Button("settings.close") {
-                    closeWindow()
+                    // Close Window
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
@@ -86,11 +86,11 @@ struct SettingsView: View {
         .frame(width: 400, height: 280)
         .background(Color(nsColor: .windowBackgroundColor))
     }
-    
-    /// Closes the settings window
-    private func closeWindow() {
-        if let window = NSApplication.shared.windows.first(where: { $0.identifier?.rawValue == "settings-window" }) {
-            window.close()
-        }
-    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    SettingsView()
+        .environmentObject(AppSettings.shared)
 }
