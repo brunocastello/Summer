@@ -129,6 +129,52 @@ final class SensorService: @unchecked Sendable {
     }
     
     private func calculateCPUTempAppleSilicon(allData: [String: Double], chipKeys: [String]) -> Int? {
+        // M1: Use Tp09 (package temperature)
+        if let temp = allData["Tp09"] {
+            let t = Int(temp.rounded())
+            if t > 25 && t < 120 { return t }
+        }
+        
+        // M2: Use Tp1h (highest package temperature)
+        if let temp = allData["Tp1h"] {
+            let t = Int(temp.rounded())
+            if t > 25 && t < 120 { return t }
+        }
+        
+        // M3: Use max between E-cores and P-cores
+        if allData["Te05"] != nil {  // M3 detected
+            var temps: [Int] = []
+            
+            // E-cores
+            for key in ["Te05", "Te0L", "Te0P", "Te0S"] {
+                if let val = allData[key] {
+                    let temp = Int(val.rounded())
+                    if temp > 25 && temp < 120 {
+                        temps.append(temp)
+                    }
+                }
+            }
+            
+            // P-cores (all Tf keys)
+            for key in chipKeys where key.hasPrefix("Tf") {
+                if let val = allData[key] {
+                    let temp = Int(val.rounded())
+                    if temp > 25 && temp < 120 {
+                        temps.append(temp)
+                    }
+                }
+            }
+            
+            return temps.max()
+        }
+        
+        // M4: Use Tp09 or max of Tp keys
+        if let temp = allData["Tp09"] {
+            let t = Int(temp.rounded())
+            if t > 25 && t < 120 { return t }
+        }
+        
+        // Fallback
         var cpuTemps: [Int] = []
         for key in chipKeys {
             if let val = allData[key] {
@@ -140,9 +186,7 @@ final class SensorService: @unchecked Sendable {
         }
         
         guard !cpuTemps.isEmpty else { return nil }
-        
-        let sum = cpuTemps.reduce(0, +)
-        let avgTemp = sum / cpuTemps.count
+        let avgTemp = cpuTemps.reduce(0, +) / cpuTemps.count
         return avgTemp
     }
 
