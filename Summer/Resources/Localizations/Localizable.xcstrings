@@ -258,6 +258,29 @@
         }
       }
     },
+    "preferences.launchatlogin" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Launch at login"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar al iniciar sesión"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iniciar no login"
+          }
+        }
+      }
+    },
     "preferences.note" : {
       "extractionState" : "manual",
       "localizations" : {

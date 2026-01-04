@@ -34,4 +34,8 @@ DEST_PATH="${BUILT_PRODUCTS_DIR}/${CONTENTS_FOLDER_PATH}/Resources/smc"
 cp "$SMC_OUTPUT" "$DEST_PATH"
 chmod +x "$DEST_PATH"
 
-echo "✅ SMC compiled and copied to: $DEST_PATH"
+# Sign the binary with Hardened Runtime
+echo "🔐 Signing SMC binary with Hardened Runtime..."
+codesign --force --sign - --options runtime "$DEST_PATH"
+
+echo "✅ SMC compiled, copied, and signed: $DEST_PATH"

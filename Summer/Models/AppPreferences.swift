@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ServiceManagement
 
 /// Temperature display mode options
 enum TemperatureMode: String, CaseIterable, Identifiable {
@@ -35,6 +36,14 @@ class AppPreferences: ObservableObject {
         }
     }
     
+    /// Launch at login preference
+    @Published var launchAtLogin: Bool {
+        didSet {
+            UserDefaults.standard.set(launchAtLogin, forKey: "launchAtLogin")
+            updateLoginItemStatus()
+        }
+    }
+    
     /// Singleton instance
     static let shared = AppPreferences()
     
@@ -46,6 +55,12 @@ class AppPreferences: ObservableObject {
         } else {
             self.temperatureMode = .system
         }
+        
+        // Load launch at login preference
+        self.launchAtLogin = UserDefaults.standard.object(forKey: "launchAtLogin") as? Bool ?? true
+        
+        // Sync with actual login item status
+        syncLoginItemStatus()
     }
     
     /// Determines effective temperature unit based on mode
@@ -93,6 +108,34 @@ class AppPreferences: ObservableObject {
             return "°C"
         case .fahrenheit:
             return "°F"
+        }
+    }
+    
+    /// Updates login item status based on preference
+    private func updateLoginItemStatus() {
+        if #available(macOS 13.0, *) {
+            do {
+                if launchAtLogin {
+                    try SMAppService.mainApp.register()
+                } else {
+                    try SMAppService.mainApp.unregister()
+                }
+            } catch {
+                // Silently ignore - this is expected when running unsigned from Xcode
+            }
+        }
+    }
+    
+    /// Syncs preference with actual login item status
+    private func syncLoginItemStatus() {
+        if #available(macOS 13.0, *) {
+            let status = SMAppService.mainApp.status
+            let isEnabled = (status == .enabled)
+            
+            // Update preference if it doesn't match actual status
+            if launchAtLogin != isEnabled {
+                launchAtLogin = isEnabled
+            }
         }
     }
 }

@@ -29,7 +29,6 @@ struct MenuBarView: View {
                     }
                 }
                 .padding(.horizontal, 7)
-                .padding(.top, 5)
             }
 
             // SENSORS
