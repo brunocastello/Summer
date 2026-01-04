@@ -174,7 +174,7 @@ final class SensorService: @unchecked Sendable {
             if t > 25 && t < 120 { return t }
         }
         
-        // Fallback
+        // Fallback: average of all available sensors
         var cpuTemps: [Int] = []
         for key in chipKeys {
             if let val = allData[key] {
