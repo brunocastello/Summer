@@ -46,7 +46,11 @@ final class SensorService: @unchecked Sendable {
                     if parts.count >= 2 {
                         let key = parts[0]
                         let value = extractValue(line)
-                        if value > 0 {
+                        
+                        // Include fan keys even if 0 RPM
+                        let isFanKey = SensorsModel.fanKeys.contains(key)
+                        
+                        if value > 0 || isFanKey {
                             results[key] = value
                         }
                     }
@@ -227,14 +231,14 @@ final class SensorService: @unchecked Sendable {
         return Int(avg.rounded())
     }
     
+    /// Detects and returns fan speeds
+    /// Returns all fans, including inactive ones (0 RPM)
     private func detectFans(allData: [String: Double]) -> [Int] {
         var detectedFans: [Int] = []
         for key in SensorsModel.fanKeys {
             if let val = allData[key] {
                 let rpm = Int(val.rounded())
-                if rpm > 0 {
-                    detectedFans.append(rpm)
-                }
+                detectedFans.append(rpm)
             }
         }
         return detectedFans

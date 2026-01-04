@@ -29,6 +29,7 @@ struct MenuBarView: View {
                     }
                 }
                 .padding(.horizontal, 7)
+                .padding(.top, 5)
             }
 
             // SENSORS
@@ -50,7 +51,7 @@ struct MenuBarView: View {
                     }
                 }
                 .padding(.horizontal, 7)
-                .padding(.top, sensorViewModel.fans.isEmpty ? 0 : 3)
+                .padding(.top, 5)
             }
 
             Divider().padding(.horizontal, 3)
@@ -87,7 +88,7 @@ struct MenuBarView: View {
                 .kerning(0.5)
         }
         .foregroundColor(.secondary)
-        .padding(.bottom, 4)
+        .padding(.bottom, 2)
     }
 }
 
