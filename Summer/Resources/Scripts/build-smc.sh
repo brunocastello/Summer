@@ -24,7 +24,7 @@ echo "🍎 Compiling SMC for build folder..."
 cd "$SMC_SOURCE_DIR"
 
 # Compile to temporary location
-clang -arch arm64 \
+clang -arch arm64 -arch x86_64 \
     -mmacosx-version-min=13.0 \
     -O3 \
     -framework IOKit \

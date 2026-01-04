@@ -8,6 +8,18 @@
 import Foundation
 
 struct SensorsModel {
+    static let intelCPUKeys = [
+        "TC0D", "TC0E", "TC0F", "TC0P",  // CPU Die
+        "TC1D", "TC1E", "TC1F", "TC1P",  // CPU cores
+        "TC2D", "TC2E", "TC2F", "TC2P",
+        "TC3D", "TC3E", "TC3F", "TC3P",
+        "TCAD", "TCXC"                   // CPU average
+    ]
+
+    static let intelGPUKeys = [
+        "TG0D", "TG0P", "TG1D", "TGDD"   // GPU Die
+    ]
+    
     static let m1Keys = [
         "Tp09", "Tp0T",
         "Tp01", "Tp05", "Tp0D", "Tp0H", "Tp0L", "Tp0P", "Tp0X", "Tp0b",

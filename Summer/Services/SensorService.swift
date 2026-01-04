@@ -8,6 +8,21 @@
 import Foundation
 
 final class SensorService: @unchecked Sendable {
+    enum ChipType {
+        case appleSilicon
+        case intel
+    }
+
+    private func detectArchitecture(allData: [String: Double]) -> ChipType {
+        // Check for Intel keys first
+        let hasIntelKeys = SensorsModel.intelCPUKeys.contains { allData[$0] != nil }
+        if hasIntelKeys {
+            return .intel
+        }
+        
+        // Default to Apple Silicon
+        return .appleSilicon
+    }
     
     func readSensors() -> SensorData {
         guard let path = Bundle.main.path(forResource: "smc", ofType: nil) else {
@@ -66,9 +81,7 @@ final class SensorService: @unchecked Sendable {
     private func processSensorData(allData: [String: Double]) -> ([String: Int], [Int]) {
         var updatedReadings: [String: Int] = [:]
         
-        let chipKeys = detectChipKeys(allData: allData)
-        
-        updatedReadings["CPU"] = calculateCPUTemp(allData: allData, chipKeys: chipKeys)
+        updatedReadings["CPU"] = calculateCPUTemp(allData: allData)
         updatedReadings["GPU"] = calculateGPUTemp(allData: allData)
         updatedReadings["Battery"] = calculateBatteryTemp(allData: allData)
         updatedReadings["Enclosure"] = calculateEnclosureTemp(allData: allData)
@@ -102,7 +115,20 @@ final class SensorService: @unchecked Sendable {
         return SensorsModel.m1Keys
     }
     
-    private func calculateCPUTemp(allData: [String: Double], chipKeys: [String]) -> Int? {
+    private func calculateCPUTemp(allData: [String: Double]) -> Int? {
+        let arch = detectArchitecture(allData: allData)
+        
+        switch arch {
+        case .appleSilicon:
+            let chipKeys = detectChipKeys(allData: allData)
+            return calculateCPUTempAppleSilicon(allData: allData, chipKeys: chipKeys)
+            
+        case .intel:
+            return calculateCPUTempIntel(allData: allData)
+        }
+    }
+    
+    private func calculateCPUTempAppleSilicon(allData: [String: Double], chipKeys: [String]) -> Int? {
         var cpuTemps: [Int] = []
         for key in chipKeys {
             if let val = allData[key] {
@@ -114,12 +140,32 @@ final class SensorService: @unchecked Sendable {
         }
         
         guard !cpuTemps.isEmpty else { return nil }
-        let avgCPU = Double(cpuTemps.reduce(0, +)) / Double(cpuTemps.count)
-        return Int(avgCPU.rounded())
+        
+        let sum = cpuTemps.reduce(0, +)
+        let avgTemp = sum / cpuTemps.count
+        return avgTemp
+    }
+
+    private func calculateCPUTempIntel(allData: [String: Double]) -> Int? {
+        var cpuTemps: [Int] = []
+        for key in SensorsModel.intelCPUKeys {
+            if let val = allData[key] {
+                let temp = Int(val.rounded())
+                if temp > 25 && temp < 120 {
+                    cpuTemps.append(temp)
+                }
+            }
+        }
+        
+        guard !cpuTemps.isEmpty else { return nil }
+        let avgTemp = cpuTemps.reduce(0, +) / cpuTemps.count
+        return avgTemp
     }
     
     private func calculateGPUTemp(allData: [String: Double]) -> Int? {
         var gpuTemps: [Int] = []
+        
+        // Try Apple Silicon keys first
         for key in SensorsModel.gpuKeys {
             if let val = allData[key] {
                 let temp = Int(val.rounded())
@@ -128,6 +174,19 @@ final class SensorService: @unchecked Sendable {
                 }
             }
         }
+        
+        // Try Intel keys if no Apple Silicon keys found
+        if gpuTemps.isEmpty {
+            for key in SensorsModel.intelGPUKeys {
+                if let val = allData[key] {
+                    let temp = Int(val.rounded())
+                    if temp > 25 && temp < 120 {
+                        gpuTemps.append(temp)
+                    }
+                }
+            }
+        }
+        
         return gpuTemps.max()
     }
     
