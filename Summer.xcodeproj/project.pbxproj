@@ -69,6 +69,7 @@
 				APP_SCRIPT_SMC /* Compile SMC Binary */,
 				APP_SOURCES /* Sources */,
 				APP_FRAMEWORKS /* Frameworks */,
+				DE0D1FCC2F09EEB000066E77 /* ShellScript */,
 				APP_RESOURCES /* Resources */,
 			);
 			buildRules = (
@@ -143,6 +144,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "\"${SRCROOT}/Summer/Resources/Scripts/build-smc.sh\"\n\n# Copy to app bundle Resources\nmkdir -p \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Resources\"\ncp \"${SRCROOT}/Summer/smc\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Resources/smc\"\nchmod +x \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/Contents/Resources/smc\"\n";
+		};
+		DE0D1FCC2F09EEB000066E77 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Summer/Resources/SMC/smc.c",
+				"$(SRCROOT)/Summer/Resources/SMC/smc.h",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(CONTENTS_FOLDER_PATH)/Resources/smc",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nbash \"${SRCROOT}/Summer/Resources/Scripts/build-smc.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
