@@ -54,7 +54,15 @@ struct SensorsModel {
     static let enclosureKeys = ["TaRF", "TaLP", "TA0P", "TH0x", "TH0a", "TCHP"]
     static let wifiKeys = ["TW0P"]
     static let storageKeys = ["NAn0", "TH0a", "TH0x", "TH0A"]
-    static let logicBoardKeys = ["TCHP"]
+    
+    // Logic Board keys - multiple options for compatibility
+    static let logicBoardKeys = [
+        "TCHP",  // Platform Controller Hub (newer Macs)
+        "TPCD",  // Platform Controller Hub Die (common Intel)
+        "TP0P",  // Platform Controller (some models)
+        "TM0P"   // Memory Proximity (fallback)
+    ]
+    
     static let palmRestKeys = ["Ts0P", "Ts1P"]
     static let psuKeys = ["Tp0C", "Tp1C", "TPCD"]
     static let fanKeys = ["F0Ac", "F1Ac", "F2Ac", "F3Ac"]
