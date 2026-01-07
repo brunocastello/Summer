@@ -8,13 +8,13 @@ Hardware temperature and fan speed monitor for Apple Silicon Macs. Summer is sti
 - GPU temperature tracking  
 - Battery, Enclosure, Wi-Fi, Storage sensors
 - Fan speed display
-- Native ARM64 performance
+- Native Universal (ARM64 and Intel) performance
 - Optimized for M1/M2/M3/M4
 
 ## Requirements
 
 - macOS 13.0+
-- Apple Silicon Mac (M1/M2/M3/M4)
+- Apple Silicon Mac (M1/M2/M3/M4) or Intel Mac
 - Xcode 15+
 
 ## Installation
@@ -37,8 +37,7 @@ The helper authorizes the SMC binary to run with elevated privileges, allowing h
 
 ## How It Works
 
-- **Build**: Compiles ARM64 SMC binary from source
-- **Launch Daemon**: Authorizes SMC binary to access sensors
+- **Build**: Compiles Universal SMC binary from source
 - **Sensors**: Reads temperature and fan data via SMC
 - **UI**: SwiftUI displays real-time hardware stats
 
