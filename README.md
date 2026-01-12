@@ -24,17 +24,6 @@ Hardware temperature and fan speed monitor for Apple Silicon Macs. Summer is sti
 3. Select your Team in Signing & Capabilities
 4. Build (⌘B) and Run (⌘R)
 
-## First Launch
-
-On first launch, Summer will request permission to install a helper:
-
-1. Click "Install" when prompted
-2. Enter your administrator password
-3. Helper installs `~/Library/LaunchDaemons/com.brunocastello.Summer.plist`
-4. Sensors appear automatically
-
-The helper authorizes the SMC binary to run with elevated privileges, allowing hardware sensor access.
-
 ## How It Works
 
 - **Build**: Compiles Universal SMC binary from source
